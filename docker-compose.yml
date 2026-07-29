@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    container_name: jwt_auth_app
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://authuser:authpass123@db:5432/jwt_auth_db
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: jwt_auth_db
+    restart: always
+    environment:
+      POSTGRES_USER: authuser
+      POSTGRES_PASSWORD: authpass123
+      POSTGRES_DB: jwt_auth_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  test_db:
+    image: postgres:16
+    container_name: jwt_auth_test_db
+    restart: always
+    environment:
+      POSTGRES_USER: authuser
+      POSTGRES_PASSWORD: authpass123
+      POSTGRES_DB: jwt_auth_test_db
+    ports:
+      - "5433:5432"
+
+volumes:
+  pgdata:
